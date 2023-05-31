@@ -6,19 +6,19 @@ import org.testng.annotations.Test;
 public class PersonTest {
 
     @Test(dataProvider = "personProvider", description = "validation of method testGetFirstName()")
-    public void testGetFirstName(Person person, String expectedFirstName) {
+    public void testGetFirstName(Person person, String expectedFirstName, String expectedLastName, int expectedAge) {
         String firstName = person.getFirstName();
         Assert.assertEquals(firstName, expectedFirstName);
     }
 
     @Test(dataProvider = "personProvider", description = "validation of method testGetLastName()")
-    public void testGetLastName(Person person, String expectedLastName) {
+    public void testGetLastName(Person person, String expectedFirstName, String expectedLastName, int expectedAge) {
         String lastName = person.getLastName();
         Assert.assertEquals(lastName, expectedLastName);
     }
 
     @Test(dataProvider = "personProvider", description = "validation of method testGetAge()")
-    public void testGetAge(Person person, int expectedAge) {
+    public void testGetAge(Person person, String expectedFirstName, String expectedLastName, int expectedAge) {
         int age = person.getAge();
         Assert.assertEquals(age, expectedAge);
     }
@@ -33,6 +33,9 @@ public class PersonTest {
     @DataProvider(name = "personProvider")
     public Object[][] personProvider() {
         Person person = new Person("John", "Doe", 30);
-        return new Object[][]{{person, "John", "Doe", 30}};
+        String expectedFirstName = "John";
+        String expectedLastName = "Doe";
+        int expectedAge = 30;
+        return new Object[][]{{person, expectedFirstName, expectedLastName, expectedAge}};
     }
 }
