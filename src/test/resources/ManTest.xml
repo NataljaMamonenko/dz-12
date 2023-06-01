@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="ManTest Suite">
+    <test name="ManTest">
+        <classes>
+            <class name="com.example.ManTest"/>
+        </classes>
+    </test>
+</suite>
