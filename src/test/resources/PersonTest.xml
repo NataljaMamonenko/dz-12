@@ -1,8 +1,28 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="PersonTest Suite">
-    <test name="PersonTest">
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="GetterSetterTests">
+    <test name="GettersTest">
         <classes>
-            <class name="com.example.PersonTest"/>
+            <class name="PersonTest">
+                <methods>
+                    <include name="testGetFirstName"/>
+                    <include name="testGetLastName"/>
+                    <include name="testGetAge"/>
+                    <include name="testGetMaidenName"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SettersTest">
+        <classes>
+            <class name="PersonTest">
+                <methods>
+                    <include name="testSetFirstName"/>
+                    <include name="testSetLastName"/>
+                    <include name="testSetAge"/>
+                    <include name="testSetMaidenName"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

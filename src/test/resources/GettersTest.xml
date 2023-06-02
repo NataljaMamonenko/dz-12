@@ -1,0 +1,13 @@
+<test name="Getters tests">
+    <groups>
+        <run>
+            <include name="GettersTest"/>
+        </run>
+    </groups>
+    <classes>
+        <class name="WomanTest"/>
+        <class name="ManTest"/>
+        <class name="PersonTest"/>
+
+    </classes>
+</test>

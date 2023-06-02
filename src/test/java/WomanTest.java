@@ -2,7 +2,6 @@ import org.example.Man;
 import org.example.Woman;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -10,7 +9,7 @@ public class WomanTest {
 
     @BeforeTest(alwaysRun = true)
     public void setUp() {
-        // Код настройки перед выполнением тестов WomanTest
+        // Код налаштування перед виконанням WomanTest
     }
 
     @Test(groups = {"GettersTest"}, description = "validation of method testGetPartner()")
@@ -26,7 +25,7 @@ public class WomanTest {
         softAssert.assertAll();
     }
 
-    @Test(description = "validation of method testSetMaidenName()")
+    @Test(groups = {"GettersTest"}, description = "validation of method testSetMaidenName()")
     public void testSetMaidenName() {
         String maidenName = "Johnson";
         Woman woman = new Woman("Anna", "Smith", 30);
@@ -36,12 +35,14 @@ public class WomanTest {
         Assert.assertEquals(retrievedMaidenName, maidenName, "Maiden name is wrong for woman");
     }
 
-    @Test(description = "validation of method testGetMaidenName()")
+    @Test(groups = {"GettersTest"}, description = "validation of method testGetMaidenName()")
     public void testGetMaidenName() {
         Woman woman = new Woman("Anna", "Smith", 30);
+        woman.setMaidenName("Smith");
         String retrievedMaidenName = woman.getMaidenName();
         Assert.assertEquals(retrievedMaidenName, "Smith", "Maiden name is wrong for woman");
     }
+
 
     @Test(groups = {"GettersTest"}, description = "validation of method testIsRetired()")
     public void testIsRetired() {
@@ -54,7 +55,7 @@ public class WomanTest {
         softAssert.assertAll();
     }
 
-    @Test(groups = {"GettersTest"}, description = "validation of method testRegisterPartnership()", dataProvider = "partnershipData")
+    @Test(groups = {"GettersTest"}, description = "validation of method testRegisterPartnership()", dataProvider = "partnershipData", dataProviderClass = DataProviderWoman.class)
     public void testRegisterPartnership(Man man, Woman woman, String expectedLastName) {
         woman.registerPartnership(man);
         Man partner = woman.getPartner();
@@ -65,15 +66,7 @@ public class WomanTest {
         softAssert.assertAll();
     }
 
-    @DataProvider(name = "partnershipData")
-    public Object[][] providePartnershipData() {
-        Man man = new Man("John", "Doe", 35);
-        Woman woman = new Woman("Anna", "Smith", 30);
-        String expectedLastName = "Doe";
-        return new Object[][]{{man, woman, expectedLastName}};
-    }
-
-    @Test(groups = {"GettersTest"}, description = "validation of method testDeregisterPartnership()", dataProvider = "deregisterPartnershipData")
+    @Test(groups = {"GettersTest"}, description = "validation of method testDeregisterPartnership()", dataProvider = "deregisterPartnershipData", dataProviderClass = DataProviderWoman.class)
     public void testDeregisterPartnership(Woman woman, Man man, String expectedLastName) {
         man.setPartner(woman);
 
@@ -84,13 +77,5 @@ public class WomanTest {
         softAssert.assertNull(partner, "Partnership is not deregistered correctly");
         softAssert.assertEquals(woman.getLastName(), expectedLastName, "Last name is wrong for woman");
         softAssert.assertAll();
-    }
-
-    @DataProvider(name = "deregisterPartnershipData")
-    public Object[][] provideDeregisterPartnershipData() {
-        Woman woman = new Woman("Anna", "Smith", 30);
-        Man man = new Man("John", "Doe", 35);
-        String expectedLastName = "Smith";
-        return new Object[][]{{woman, man, expectedLastName}};
     }
 }
