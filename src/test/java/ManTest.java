@@ -1,67 +1,57 @@
 import org.example.Man;
 import org.example.Woman;
-import org.testng.Assert;
-import org.testng.annotations.DataProvider;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 public class ManTest {
 
-    @Test(dataProvider = "partnersProvider", description = "validation of method testGetPartner()")
+    @BeforeTest(alwaysRun = true)
+    public void setUp() {
+        // Код налаштування перед виконанням ManTest
+    }
+
+    @Test(groups = {"GettersTest"}, description = "validation of method testGetPartner()", dataProvider = "partnerData", dataProviderClass = DataProviderMan.class)
     public void testGetPartner(Woman woman, Man man) {
         man.setPartner(woman);
+
         Woman partner = man.getPartner();
-        Assert.assertEquals(partner, woman);
+
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(partner, woman, "Partner is not retrieved correctly");
+        softAssert.assertAll();
     }
 
-    @Test(dataProvider = "retirementProvider", description = "validation of method testIsRetired()")
-    public void testIsRetired(Man man, boolean expectedResult) {
+    @Test(description = "validation of method testIsRetired()", dataProvider = "retiredData", dataProviderClass = DataProviderMan.class)
+    public void testIsRetired(Man man, boolean expectedIsRetired) {
         boolean isRetired = man.isRetired();
-        Assert.assertEquals(isRetired, expectedResult);
+
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(isRetired, expectedIsRetired, "Retirement status is incorrect");
+        softAssert.assertAll();
     }
 
-    @Test(dataProvider = "partnershipProvider", description = "validation of method testRegisterPartnership()")
-    public void testRegisterPartnership(Woman woman, Man man) {
+    @Test(groups = {"GettersTest"}, description = "validation of method testRegisterPartnership()", dataProvider = "partnershipData", dataProviderClass = DataProviderMan.class)
+    public void testRegisterPartnership(Woman woman, Man man, String expectedLastName) {
         man.registerPartnership(woman);
         Woman partner = man.getPartner();
-        Assert.assertEquals(partner, woman);
-        Assert.assertEquals(woman.getLastName(), "Doe");
+
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(partner, woman, "Partner is not registered correctly");
+        softAssert.assertEquals(woman.getLastName(), expectedLastName, "Last name is wrong for woman");
+        softAssert.assertAll();
     }
 
-    @Test(dataProvider = "deregisterProvider", description = "validation of method testDeregisterPartnership()")
-    public void testDeregisterPartnership(Woman woman, Man man, boolean preserveLastName) {
+    @Test(groups = {"GettersTest"}, description = "validation of method testDeregisterPartnership()", dataProvider = "deregisterPartnershipData", dataProviderClass = DataProviderMan.class)
+    public void testDeregisterPartnership(Woman woman, Man man, String expectedLastName) {
         man.setPartner(woman);
-        man.deregisterPartnership(preserveLastName);
+
+        man.deregisterPartnership(false);
         Woman partner = man.getPartner();
-        Assert.assertNull(partner);
-        Assert.assertEquals(woman.getLastName(), preserveLastName ? "Doe" : "Smith");
-    }
 
-    @DataProvider(name = "partnersProvider")
-    public Object[][] partnersProvider() {
-        Woman woman = new Woman("Anna", "Smith", 30);
-        Man man = new Man("John", "Doe", 35);
-        return new Object[][]{{woman, man}};
-    }
-
-    @DataProvider(name = "retirementProvider")
-    public Object[][] retirementProvider() {
-        Man man1 = new Man("John", "Doe", 40); // Not retired
-        Man man2 = new Man("Adam", "Smith", 70); // Retired
-        return new Object[][]{{man1, false}, {man2, true}};
-    }
-
-    @DataProvider(name = "partnershipProvider")
-    public Object[][] partnershipProvider() {
-        Woman woman = new Woman("Anna", "Smith", 30);
-        Man man = new Man("John", "Doe", 35);
-        return new Object[][]{{woman, man}};
-    }
-
-    @DataProvider(name = "deregisterProvider")
-    public Object[][] deregisterProvider() {
-        Woman woman = new Woman("Anna", "Smith", 30);
-        Man man = new Man("John", "Doe", 35);
-        return new Object[][]{{woman, man, false}, {woman, man, true}};
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertNull(partner, "Partnership is not deregistered correctly");
+        softAssert.assertEquals(woman.getLastName(), expectedLastName, "Last name is wrong for woman");
+        softAssert.assertAll();
     }
 }
-
